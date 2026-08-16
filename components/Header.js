@@ -3,11 +3,11 @@
 import { useEffect, useRef, useState } from 'react';
 
 const NAV_LINKS = [
-  { href: '/home', label: 'Home' },
-  { href: '/services', label: 'Services' },
-  { href: '/calculator', label: 'Rate Calculator' },
-  { href: '/tracking', label: 'Track Order' },
-  { href: '/contact', label: 'Contact' }
+  { href: '#home', label: 'Home' },
+  { href: '#services', label: 'Services' },
+  { href: '#calculator', label: 'Rate Calculator' },
+  { href: '#tracking', label: 'Track Order' },
+  { href: '#contact', label: 'Contact' }
 ];
 
 export default function Header() {
@@ -65,7 +65,7 @@ export default function Header() {
       id="site-header"
     >
       <div className="container nav-wrap">
-        <a className="brand" href="/home" aria-label="Swift Nepal Courier home">
+        <a className="brand" href="#home" aria-label="Swift Nepal Courier home">
           <span className="brand-icon" aria-hidden="true">
             <svg
               viewBox="0 0 24 24"
@@ -101,7 +101,7 @@ export default function Header() {
               </li>
             ))}
           </ul>
-          <a className="btn btn-primary btn-nav" href="/pickup" onClick={() => setOpen(false)}>
+          <a className="btn btn-primary btn-nav" href="#pickup" onClick={() => setOpen(false)}>
             Schedule Pickup
           </a>
         </nav>
