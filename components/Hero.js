@@ -40,7 +40,7 @@ export default function Hero() {
               loading="eager"
             />
             <span className="hero-stamp" aria-hidden="true">
-              <img src="/assets/stamp.JPG" alt="" width="578" height="578" loading="lazy" />
+              <img src="/assets/stamp.png" alt="" width="578" height="578" loading="lazy" />
             </span>
           </figure>
 

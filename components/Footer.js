@@ -2,20 +2,7 @@ import Newsletter from './Newsletter';
 
 function BrandIcon() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 7l9-4 9 4-9 4-9-4z" />
-      <path d="M3 7v10l9 4 9-4V7" />
-      <path d="M12 11v10" />
-      <path d="M6 9v6" />
-      <path d="M18 9v6" />
-    </svg>
+    <img src="/assets/stamp1.png" alt="Swift Nepal Courier logo" className="logo" />
   );
 }
 
@@ -88,7 +75,7 @@ export default function Footer() {
               <BrandIcon />
             </span>
             <span className="brand-name">
-              Swift<span>Nepal</span>
+              Swift Nepal<span> Courier</span>
             </span>
           </a>
           <p>

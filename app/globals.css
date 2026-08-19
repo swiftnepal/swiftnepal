@@ -270,6 +270,27 @@ select {
   min-height: var(--header-h);
 }
 
+/* brand logo*/
+.logo {
+  width: 190px;
+  height: auto;
+  max-width: 100%;
+  display: block;
+  border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+  .logo {
+    width: 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    width: 130px;
+  }
+}
+
 /* Brand */
 .brand {
   display: inline-flex;
@@ -285,8 +306,8 @@ select {
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background: linear-gradient(135deg, var(--electric), #3B82F6);
-  color: var(--white);
+  background: linear-gradient(135deg, var(--electric), );
+
   box-shadow: var(--shadow-md);
 }
 
@@ -721,10 +742,10 @@ select {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 26px 22px;
+  padding: 26px 20px;
   box-shadow: var(--shadow-sm);
   display: grid;
-  gap: 18px;
+
 }
 
 .form-row {
@@ -1008,6 +1029,16 @@ a.contact-card:hover {
 .result-details strong {
   color: var(--white);
   text-align: right;
+}
+
+.result-details li.result-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 12px;
+  margin-top: 4px;
+}
+
+.result-details li.result-divider strong {
+  color: var(--orange);
 }
 
 /* ==========================================================================

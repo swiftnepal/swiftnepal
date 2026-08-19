@@ -1,13 +1,14 @@
 'use client';
+
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 
 const NAV_LINKS = [
-  { href: '#home', label: 'Home' },
-  { href: '#services', label: 'Services' },
-  { href: '#calculator', label: 'Rate Calculator' },
-  { href: '#tracking', label: 'Track Order' },
-  { href: '#contact', label: 'Contact' }
+  { href: '#home', path: '/', id: 'home', label: 'Home' },
+  { href: '#services', path: '/services', id: 'services', label: 'Services' },
+  { href: '#calculator', path: '/calculator', id: 'calculator', label: 'Rate Calculator' },
+  { href: '#tracking', path: '/tracking', id: 'tracking', label: 'Track Order' },
+  { href: '#contact', path: '/contact', id: 'contact', label: 'Contact' }
 ];
 
 export default function Header() {
@@ -17,14 +18,36 @@ export default function Header() {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
+
     onScroll();
+
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+    };
   }, []);
 
-  // Prevent body scroll while the mobile drawer is open
+  // Scroll to hash section on page load, accounting for sticky header
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (!hash) return;
+
+    const id = hash.slice(1);
+    const section = document.getElementById(id);
+    if (!section) return;
+
+    requestAnimationFrame(() => {
+      const headerH = document.getElementById('site-header')?.offsetHeight || 0;
+      const top = section.getBoundingClientRect().top + window.scrollY - headerH;
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
+  }, []);
+
+  // Prevent body scroll while mobile menu is open
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
+
     return () => {
       document.body.style.overflow = '';
     };
@@ -33,30 +56,53 @@ export default function Header() {
   useEffect(() => {
     if (!open) return;
 
-    // Close when clicking outside the header
     const onDocClick = (e) => {
-      if (headerRef.current && !headerRef.current.contains(e.target)) setOpen(false);
+      if (
+        headerRef.current &&
+        !headerRef.current.contains(e.target)
+      ) {
+        setOpen(false);
+      }
     };
 
-    // Close on Escape
     const onKeydown = (e) => {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key === 'Escape') {
+        setOpen(false);
+      }
     };
 
-    // Restore scroll state if the viewport grows past the mobile breakpoint
     const onResize = () => {
-      if (window.innerWidth >= 1024) setOpen(false);
+      if (window.innerWidth >= 1024) {
+        setOpen(false);
+      }
     };
 
     document.addEventListener('click', onDocClick);
     document.addEventListener('keydown', onKeydown);
     window.addEventListener('resize', onResize);
+
     return () => {
       document.removeEventListener('click', onDocClick);
       document.removeEventListener('keydown', onKeydown);
       window.removeEventListener('resize', onResize);
     };
   }, [open]);
+
+  const handleNavClick = (e, link) => {
+    e.preventDefault();
+
+    const section = document.getElementById(link.id);
+
+    if (section) {
+      const headerH = document.getElementById('site-header')?.offsetHeight || 0;
+      const top = section.getBoundingClientRect().top + window.scrollY - headerH;
+      window.scrollTo({ top, behavior: 'smooth' });
+
+      window.history.replaceState({}, '', link.path);
+    }
+
+    setOpen(false);
+  };
 
   return (
     <header
@@ -65,28 +111,29 @@ export default function Header() {
       id="site-header"
     >
       <div className="container nav-wrap">
-        <a className="brand" href="#home" aria-label="Swift Nepal Courier home">
-          <span className="brand-icon" aria-hidden="true">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M3 7l9-4 9 4-9 4-9-4z" />
-              <path d="M3 7v10l9 4 9-4V7" />
-              <path d="M12 11v10" />
-              <path d="M6 9v6" />
-              <path d="M18 9v6" />
-            </svg>
-          </span>
-          <span className="brand-name">
-            Swift<span>Nepal</span>
-          </span>
-        </a>
 
+        {/* Logo */}
+        <Link
+          className="brand"
+          href="/"
+          onClick={(e) =>
+            handleNavClick(e, {
+              href: '#home',
+              path: '/',
+              id: 'home',
+              label: 'Home',
+            })
+          }
+          aria-label="Swift Nepal Courier home"
+        >
+            <img src="/assets/stamp1.jpg" alt="Swift Nepal Courier logo" className="logo" />
+
+          {/* <span className="brand-name">
+            Swift Nepal<span> Courier</span>
+          </span> */}
+        </Link>
+
+        {/* Navigation */}
         <nav
           className={`main-nav${open ? ' is-open' : ''}`}
           id="main-nav"
@@ -94,18 +141,36 @@ export default function Header() {
         >
           <ul className="nav-list">
             {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <a className="nav-link" href={link.href} onClick={() => setOpen(false)}>
+              <li key={link.id}>
+                <Link
+                  className="nav-link"
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link)}
+                >
                   {link.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
-          <a className="btn btn-primary btn-nav" href="#pickup" onClick={() => setOpen(false)}>
+
+          {/* Schedule Pickup */}
+          <Link
+            className="btn btn-primary btn-nav"
+            href="#pickup"
+            onClick={(e) =>
+              handleNavClick(e, {
+                href: '#pickup',
+                path: '/pickup',
+                id: 'pickup',
+                label: 'Schedule Pickup',
+              })
+            }
+          >
             Schedule Pickup
-          </a>
+          </Link>
         </nav>
 
+        {/* Mobile Menu Button */}
         <button
           className="nav-toggle"
           id="nav-toggle"
@@ -119,6 +184,7 @@ export default function Header() {
           <span className="nav-toggle-bar" aria-hidden="true"></span>
           <span className="nav-toggle-bar" aria-hidden="true"></span>
         </button>
+
       </div>
     </header>
   );

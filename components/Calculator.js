@@ -6,6 +6,11 @@ import { RATE_GROUPS, calculate, currency, getGroup } from '@/lib/rates';
 export default function Calculator() {
   const [destination, setDestination] = useState('');
   const [weight, setWeight] = useState('');
+  const [serviceCharge, setServiceCharge] = useState('');
+  const [vat, setVat] = useState('');
+  const [tax, setTax] = useState('');
+  const [packingCharge, setPackingCharge] = useState('');
+  const [deliveryCharge, setDeliveryCharge] = useState('');
   const [fieldErrors, setFieldErrors] = useState({});
   const [msg, setMsg] = useState(null); // { text, isError }
   const [result, setResult] = useState(null);
@@ -20,7 +25,12 @@ export default function Calculator() {
     const data = {
       origin: 'Nepal',
       destination,
-      weight: parseFloat(weight)
+      weight: parseFloat(weight),
+      serviceCharge: parseFloat(serviceCharge) || 0,
+      vat: parseFloat(vat) || 0,
+      tax: parseFloat(tax) || 0,
+      packingCharge: parseFloat(packingCharge) || 0,
+      deliveryCharge: parseFloat(deliveryCharge) || 0
     };
 
     const errors = {};
@@ -101,7 +111,84 @@ export default function Calculator() {
               </div>
             </div>
 
-            <button className="btn btn-primary btn-block" type="submit">
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="serviceCharge">Service Charge (NPR)</label>
+                <input
+                  type="number"
+                  id="serviceCharge"
+                  name="serviceCharge"
+                  min="0"
+                  step="1"
+                  placeholder="0"
+                  value={serviceCharge}
+                  onChange={(e) => setServiceCharge(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="vat">VAT (NPR)</label>
+                <input
+                  type="number"
+                  id="vat"
+                  name="vat"
+                  min="0"
+                  step="1"
+                  placeholder="0"
+                  value={vat}
+                  onChange={(e) => setVat(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="tax">Tax (NPR)</label>
+                <input
+                  type="number"
+                  id="tax"
+                  name="tax"
+                  min="0"
+                  step="1"
+                  placeholder="0"
+                  value={tax}
+                  onChange={(e) => setTax(e.target.value)}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="packingCharge">Packing Charge (NPR)</label>
+                <input
+                  type="number"
+                  id="packingCharge"
+                  name="packingCharge"
+                  min="0"
+                  step="1"
+                  placeholder="0"
+                  value={packingCharge}
+                  onChange={(e) => setPackingCharge(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="deliveryCharge">Delivery / Pickup Charge (NPR)</label>
+                <input
+                  type="number"
+                  id="deliveryCharge"
+                  name="deliveryCharge"
+                  min="0"
+                  step="1"
+                  placeholder="0"
+                  value={deliveryCharge}
+                  onChange={(e) => setDeliveryCharge(e.target.value)}
+                />
+              </div>
+            </div>
+
+            < button className="btn btn-primary btn-block" type="submit" style={{
+    marginTop: "10px",
+    width: "100%",
+  }} >
               Calculate Price
             </button>
             <p className={`calc-msg${msg?.isError ? ' is-error' : ''}`} role="status" aria-live="polite">
@@ -136,9 +223,45 @@ export default function Calculator() {
                   <strong>{result.quote.basis}</strong>
                 </li>
                 <li>
-                  <span>Per kg rate</span>
-                  <strong>{result.quote.perKg ? currency(result.quote.perKg) : '—'}</strong>
+                  <span>Shipping cost</span>
+                  <strong>{currency(result.quote.shippingCost)}</strong>
                 </li>
+                {result.quote.serviceCharge > 0 && (
+                  <li>
+                    <span>Service charge</span>
+                    <strong>{currency(result.quote.serviceCharge)}</strong>
+                  </li>
+                )}
+                {result.quote.vat > 0 && (
+                  <li>
+                    <span>VAT</span>
+                    <strong>{currency(result.quote.vat)}</strong>
+                  </li>
+                )}
+                {result.quote.tax > 0 && (
+                  <li>
+                    <span>Tax</span>
+                    <strong>{currency(result.quote.tax)}</strong>
+                  </li>
+                )}
+                {result.quote.packingCharge > 0 && (
+                  <li>
+                    <span>Packing charge</span>
+                    <strong>{currency(result.quote.packingCharge)}</strong>
+                  </li>
+                )}
+                {result.quote.deliveryCharge > 0 && (
+                  <li>
+                    <span>Delivery / Pickup charge</span>
+                    <strong>{currency(result.quote.deliveryCharge)}</strong>
+                  </li>
+                )}
+                {result.quote.additionalTotal > 0 && (
+                  <li className="result-divider">
+                    <span>Total additional charges</span>
+                    <strong>{currency(result.quote.additionalTotal)}</strong>
+                  </li>
+                )}
               </ul>
               <button
                 className="btn btn-outline btn-block"
