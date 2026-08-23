@@ -126,7 +126,7 @@ export default function Header() {
           }
           aria-label="Swift Nepal Courier home"
         >
-            <img src="/assets/stamp1.jpg" alt="Swift Nepal Courier logo" className="logo" />
+            <img src="/assets/stamp1.svg" alt="Swift Nepal Courier logo" className="logo" />
 
           {/* <span className="brand-name">
             Swift Nepal<span> Courier</span>
