@@ -222,6 +222,12 @@ export default function Calculator() {
                   <span>Rate basis</span>
                   <strong>{result.quote.basis}</strong>
                 </li>
+                {result.quote.perKg != null && (
+                  <li>
+                    <span>Per kg rate</span>
+                    <strong>{currency(result.quote.perKg)} / kg</strong>
+                  </li>
+                )}
                 <li>
                   <span>Shipping cost</span>
                   <strong>{currency(result.quote.shippingCost)}</strong>
